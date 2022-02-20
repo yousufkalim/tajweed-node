@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      required: true,
     },
     email: {
       type: String,
@@ -18,7 +19,12 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
+      required: true,
       minlength: 8,
+    },
+    number: {
+      type: String,
+      required: true,
     },
     otp: {
       type: String,
@@ -32,7 +38,6 @@ const userSchema = new mongoose.Schema(
     country: String,
     address: String,
     city: String,
-    number: String,
   },
   {
     timestamps: true,

@@ -23,7 +23,14 @@ exports.create = async (req, res) => {
         .status(409)
         .json({ success: false, message: "User already exists." });
     }
+
+    req.body.password = bcrypt.hashSync(
+      req.body.password,
+      parseInt(bcryptSalt)
+    );
+
     const user = await Users.create(req.body); // Adding user in db
+
     // Done
     res.json({ success: true, user }); //Success
   } catch (err) {
@@ -41,7 +48,7 @@ exports.create = async (req, res) => {
 exports.getAll = async (req, res) => {
   try {
     const users = await Users.find(); // Finding all the users from db
-    res.json({ success: true, users }); // Success
+    res.json({ success: true, users: users.reverse() }); // Success
   } catch (err) {
     // Error handling
     console.log("Error ----> ", err);
@@ -125,6 +132,14 @@ exports.verifyOTP = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const userId = req.params.userId; // Getting user id from URL parameter
+
+    if (req.body.password) {
+      req.body.password = bcrypt.hashSync(
+        req.body.password,
+        parseInt(bcryptSalt)
+      );
+    }
+
     const user = await Users.findByIdAndUpdate(userId, req.body, { new: true }); // Updating the user
     res.json({ success: true, user }); // Success
   } catch (err) {

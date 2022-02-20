@@ -13,21 +13,24 @@ Validations
 // You can create multiple validations strategies (Read express-validator documentation for more details)
 // User Signup Validation
 exports.validateUser = [
+  check("name", "Name is required.").notEmpty().trim(),
   check("email", "Email is required.").notEmpty().isEmail().trim(),
+  check("password", "Password is required.").notEmpty().trim(),
+  check("number", "Number is required.").notEmpty().trim(),
 ];
+
 exports.validatePassword = [
   check("password", "Password is required.")
     .notEmpty()
     .trim()
     .isLength({ min: 8 }),
 ];
+
 // User Signup Validation
 exports.validateUserUpdate = [
   check("name", "Name is required.").notEmpty().trim(),
-  check("dob", "Date of Birth is required").notEmpty().isDate().trim(),
-  check("city", "City name is required").notEmpty().trim(),
-  check("country", "Country Name is required").notEmpty().trim(),
-  check("number", "Number is required.").notEmpty().isNumeric().trim(),
+  check("email", "Email is required.").notEmpty().isEmail().trim(),
+  check("number", "Number is required.").notEmpty().trim(),
 ];
 
 // Login validation
