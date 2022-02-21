@@ -24,10 +24,10 @@ exports.create = async (req, res) => {
         .json({ success: false, message: "User already exists." });
     }
 
-    req.body.password = bcrypt.hashSync(
-      req.body.password,
-      parseInt(bcryptSalt)
-    );
+    // req.body.password = bcrypt.hashSync(
+    //   req.body.password,
+    //   parseInt(bcryptSalt)
+    // );
 
     const user = await Users.create(req.body); // Adding user in db
 
