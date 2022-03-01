@@ -15,7 +15,7 @@ const bcryptSalt = process.env.BCRYPT_SALT || 10;
 
 exports.checkEmail = async (req, res) => {
   try {
-    const user = await Users.findOne({ email: req.body.email });
+    const user = await Users.findOne({ email: req.params.email });
 
     res.json({ success: true, userExits: user ? true : false });
   } catch (err) {
