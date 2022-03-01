@@ -23,9 +23,7 @@ const {
 
 // Create - User Signup
 router.post("/email", users.checkEmail);
-ß;
 router.post("/", validateUser, isValidated, users.create);
-ß;
 
 // Read
 router.get("/", users.getAll); // Get all users at once
