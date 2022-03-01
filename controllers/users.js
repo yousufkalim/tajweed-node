@@ -8,6 +8,24 @@ const { sendOTP } = require("../utils/sendEmail");
 const bcryptSalt = process.env.BCRYPT_SALT || 10;
 
 /**
+ * Check Eamil
+ * @param {object} req
+ * @param {object} res
+ */
+
+exports.checkEmail = async (req, res) => {
+  try {
+    const user = await Users.findOne({ email: req.body.email });
+
+    res.json({ success: true, userExits: user ? true : false });
+  } catch (err) {
+    // Error handling
+    console.log("Error ----> ", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+/**
  * Create User - Signup
  * @param {object} req
  * @param {object} res

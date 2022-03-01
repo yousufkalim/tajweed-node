@@ -24,7 +24,9 @@ const userSchema = new mongoose.Schema(
     },
     number: {
       type: String,
-      required: true,
+    },
+    whatsapp_number: {
+      type: String,
     },
     otp: {
       type: String,
