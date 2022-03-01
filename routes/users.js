@@ -22,7 +22,7 @@ const {
  */
 
 // Create - User Signup
-router.post("/email/:email", users.checkEmail);
+router.get("/email/:email", users.checkEmail);
 router.post("/", validateUser, isValidated, users.create);
 
 // Read
