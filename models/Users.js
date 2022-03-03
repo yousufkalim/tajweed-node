@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    dob: Date,
+    age: Number,
     country: String,
     address: String,
     city: String,
