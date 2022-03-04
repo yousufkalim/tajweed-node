@@ -28,14 +28,9 @@ router.post("/", validateUser, isValidated, users.create);
 // Read
 router.get("/", users.getAll); // Get all users at once
 router.get("/:userId", users.getById); // Get one user by it's id
-// Assign Password
-router.put(
-  "/assignPassword/:userId",
-  validatePassword,
-  isValidated,
-  users.assignPswd
-);
-router.put("/verifyOTP/:userId", users.verifyOTP);
+
+router.put("/sendotp/:userId", users.assignOtp); // Send OTP
+router.put("/verifyOTP/:userId", users.verifyOTP); // Verify OTP
 // Update
 router.put("/:userId", validateUserUpdate, isValidated, users.update); // Update a specific user by it's id
 

@@ -91,23 +91,23 @@ exports.getById = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
-//Assign Password to a user
-exports.assignPswd = async (req, res) => {
+//Send OTP to a user
+exports.assignOtp = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const password = req.body.password;
+    // const password = req.body.password;
     const user = await Users.findById(userId);
     if (!user) {
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
     }
-    req.body.password = bcrypt.hashSync(password, parseInt(bcryptSalt)); // Hashing the password with salt 8
+    // req.body.password = bcrypt.hashSync(password, parseInt(bcryptSalt)); // Hashing the password with salt 8
     let otp = Math.random().toString(36).slice(-6);
     console.log("otp", otp);
     sendOTP(user.email, otp).then(async () => {
       // If email is sent then we have to update the otp n password in db
-      user.password = req.body.password;
+      // user.password = req.body.password;
       user.otp = otp;
       await user.save();
       // Done
@@ -130,6 +130,7 @@ exports.verifyOTP = async (req, res) => {
     const user = await Users.findById(userId);
     if (user.otp === otp) {
       user.verification = true;
+      user.otp = null;
       await user.save();
       return res.json({
         success: true,
@@ -138,7 +139,7 @@ exports.verifyOTP = async (req, res) => {
       });
     }
     return res.status(404).json({ success: false, message: "OTP is invalid" });
-  } catch {
+  } catch (err) {
     console.log("Error ----> ", err);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
@@ -152,12 +153,12 @@ exports.update = async (req, res) => {
   try {
     const userId = req.params.userId; // Getting user id from URL parameter
 
-    if (req.body.password) {
-      req.body.password = bcrypt.hashSync(
-        req.body.password,
-        parseInt(bcryptSalt)
-      );
-    }
+    // if (req.body.password) {
+    //   req.body.password = bcrypt.hashSync(
+    //     req.body.password,
+    //     parseInt(bcryptSalt)
+    //   );
+    // }
 
     const user = await Users.findByIdAndUpdate(userId, req.body, { new: true }); // Updating the user
     res.json({ success: true, user }); // Success
