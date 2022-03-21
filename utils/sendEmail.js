@@ -114,7 +114,7 @@ const OtpTemplate = (otp) => {
                 style="height: auto; display: block"
               />
               <h2 style="font-family: Gadugi">
-                Assalam O Alikum! Brother, Your OTP is below
+                Assalam O Alikum!, Your OTP is below
               </h2>
             </td>
           </tr>
