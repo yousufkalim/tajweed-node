@@ -417,7 +417,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"first_name\": \"User\",\n    \"last_name\": \"Name\",\n    \"gender\": \"male\",\n    \"age\": 55,\n    \"city\": \"Lahore\",\n    \"state\": \"Punjab\",\n    \"country\": \"Pakistan\",\n    \"whatsapp_number\": \"+923123456789\",\n    \"email\": \"najamulsaqib@falconit.com.pk\",\n    \"password\": \"12345678\",\n    \"father_name\": \"father name\",\n    \"father_phone_number\": \"03123456789\",\n    \"mother_name\": \"mother name\",\n    \"mother_phone_number\": \"03123456789\",\n    \"course\": \"Quran Qirat\",\n    \"starting\": \"2022-06-02\",\n    \"language\": \"English\",\n    \"skype_id\": \"123456789qwerty\",\n    \"zoom_id\": \"123456789qwerty\"\n}"
+							"raw": "{\n    \"first_name\": \"User\",\n    \"last_name\": \"Name\",\n    \"gender\": \"male\",\n    \"age\": 55,\n    \"city\": \"Lahore\",\n    \"state\": \"Punjab\",\n    \"country\": \"Pakistan\",\n    \"whatsapp_number\": \"+923123456789\",\n    \"phone\": \"923123456789\",\n    \"email\": \"najamulsaqib@falconit.com.pk\",\n    \"password\": \"12345678\",\n    \"father_name\": \"father name\",\n    \"father_phone_number\": \"03123456789\",\n    \"mother_name\": \"mother name\",\n    \"mother_phone_number\": \"03123456789\",\n    \"course\": \"Quran Qirat\",\n    \"starting\": \"2022-06-02\",\n    \"language\": \"English\",\n    \"skype_id\": \"123456789qwerty\",\n    \"zoom_id\": \"123456789qwerty\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:5000/api/student/",

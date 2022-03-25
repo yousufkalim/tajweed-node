@@ -51,6 +51,7 @@ const studentSchema = new mongoose.Schema(
       required: true,
       minlength: 8,
     },
+    phone: String,
     father_name: String,
     father_phone_number: String,
     mother_name: String,

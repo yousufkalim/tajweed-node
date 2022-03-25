@@ -67,6 +67,13 @@ exports.validateStudent = [
     .isNumeric()
     .withMessage("Age can oly be in number")
     .trim(),
+  check("phone")
+    .optional()
+    .isNumeric()
+    .withMessage("Phone number must be numeric")
+    .isLength({ min: 11 })
+    .withMessage("Phone number must be 11 number long")
+    .trim(),
   check("gender").notEmpty().withMessage("Gender is required"),
   check("city").notEmpty().withMessage("City is required").trim(),
   check("state").notEmpty().withMessage("State/Province is required").trim(),
@@ -119,6 +126,13 @@ exports.validateStudentUpdate = [
     .withMessage("Phone number must be numeric")
     .isLength({ min: 11 })
     .withMessage("WhatsApp number must be 11 number long")
+    .trim(),
+  check("phone")
+    .optional()
+    .isNumeric()
+    .withMessage("Phone number must be numeric")
+    .isLength({ min: 11 })
+    .withMessage("Phone number must be 11 number long")
     .trim(),
   check("email")
     .optional()
