@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d842d05b-41e8-44d9-ae4b-389fb6e8e4bc",
+		"_postman_id": "06ed63b4-5376-45b3-b378-d8e5e9176ca9",
 		"name": "Tajweed",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -252,6 +252,257 @@
 								"auth",
 								"password",
 								"62037b4a8bdf848b6a25a41b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Student Registration",
+			"item": [
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"najamulsaqib@falconit.com.pk\",\n    \"password\": \"rfydwfjb\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/student/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"student",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "confirm auth",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdHVkZW50Ijp7Il9pZCI6IjYyM2Q3N2I1YmI1NWI2MTc5OTkwMWUxOCIsImZpcnN0X25hbWUiOiJVc2VyIiwibGFzdF9uYW1lIjoiTmFtZSIsImdlbmRlciI6Im1hbGUiLCJhZ2UiOjU1LCJjaXR5IjoiTGFob3JlIiwic3RhdGUiOiJQdW5qYWIiLCJjb3VudHJ5IjoiUGFraXN0YW4iLCJ3aGF0c2FwcF9udW1iZXIiOiIrOTIzMTIzNDU2Nzg5IiwiZW1haWwiOiJ1c2VyQHRhandlZWQuY29tIiwicGFzc3dvcmQiOiIkMmEkMTAkcjVlUmN2RFY5M3pmak8xb3ExNmFHZUQ1RVJmNVVoYmdxSTFoNzJUaHZvUWx3ZzgueXpWeHkiLCJmYXRoZXJfbmFtZSI6ImZhdGhlciBuYW1lIiwiZmF0aGVyX3Bob25lX251bWJlciI6IjAzMTIzNDU2Nzg5IiwibW90aGVyX25hbWUiOiJtb3RoZXIgbmFtZSIsIm1vdGhlcl9waG9uZV9udW1iZXIiOiIwMzEyMzQ1Njc4OSIsImNvdXJzZSI6IlF1cmFuIFFpcmF0Iiwic3RhcnRpbmciOiIwMi8wNi8yMiIsImxhbmd1YWdlIjoiRW5nbGlzaCIsInNreXBlX2lkIjoiMTIzNDU2Nzg5cXdlcnR5Iiwiem9vbV9pZCI6IjEyMzQ1Njc4OXF3ZXJ0eSIsImNyZWF0ZWRBdCI6IjIwMjItMDMtMjVUMDg6MDU6MDkuNTM0WiIsInVwZGF0ZWRBdCI6IjIwMjItMDMtMjVUMDg6MDU6MDkuNTM0WiIsIl9fdiI6MH0sImlhdCI6MTY0ODIwNTUwNywiZXhwIjoxNjQ4NTY1NTA3fQ.ekvcWNegceioWtzTc23vMfKUNizRXdBKfGm2t2yuXfQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/student/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"student",
+										"auth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "change password",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"oldPassword\": \"123456789\",\n    \"newPassword\": \"12345678\",\n    \"confirmPassword\": \"12345678\"\n}"
+								},
+								"url": {
+									"raw": "http://localhost:5000/api/student/password/623d77b5bb55b61799901e18",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"student",
+										"password",
+										"623d77b5bb55b61799901e18"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Forgot password",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:5000/api/student/forgot/najam.falconit@gmail.com",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "5000",
+									"path": [
+										"api",
+										"student",
+										"forgot",
+										"najam.falconit@gmail.com"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/student/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"student",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"User\",\n    \"last_name\": \"Name\",\n    \"gender\": \"male\",\n    \"age\": 55,\n    \"city\": \"Lahore\",\n    \"state\": \"Punjab\",\n    \"country\": \"Pakistan\",\n    \"whatsapp_number\": \"+923123456789\",\n    \"phone\": \"923123456789\",\n    \"email\": \"najamulsaqib@falconit.com.pk\",\n    \"password\": \"12345678\",\n    \"father_name\": \"father name\",\n    \"father_phone_number\": \"03123456789\",\n    \"mother_name\": \"mother name\",\n    \"mother_phone_number\": \"03123456789\",\n    \"course\": \"Quran Qirat\",\n    \"starting\": \"2022-06-02\",\n    \"language\": \"English\",\n    \"skype_id\": \"123456789qwerty\",\n    \"zoom_id\": \"123456789qwerty\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/student/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"student",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/student/623d925f2add4e1c0b92dfd0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"student",
+								"623d925f2add4e1c0b92dfd0"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/student/623d906a3bac3e1a5093001a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"student",
+								"623d906a3bac3e1a5093001a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"User 2\",\n    \"last_name\": \"Name\",\n    \"gender\": \"male\",\n    \"age\": 55,\n    \"city\": \"Lahore\",\n    \"state\": \"Punjab\",\n    \"country\": \"Pakistan\",\n    \"whatsapp_number\": \"+923123456789\",\n    \"email\": \"najam.falconit@gmail.com\",\n    \"password\": \"$2a$10$r5eRcvDV93zfjO1oq16aGeD5ERf5UhbgqI1h72ThvoQlwg8.yzVxy\",\n    \"father_name\": \"father name\",\n    \"father_phone_number\": \"03123456789\",\n    \"mother_name\": \"mother name\",\n    \"mother_phone_number\": \"03123456789\",\n    \"course\": \"Quran Qirat\",\n    \"starting\": \"2022-06-02\",\n    \"language\": \"English\",\n    \"skype_id\": \"123456789qwerty\",\n    \"zoom_id\": \"123456789qwerty\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/student/623d925f2add4e1c0b92dfd0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"student",
+								"623d925f2add4e1c0b92dfd0"
 							]
 						}
 					},

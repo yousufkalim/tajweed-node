@@ -26,6 +26,8 @@ exports.checkAuth = (req, res, next) => {
     req.admin = decoded.admin;
     req.token = token;
 
+    req.student = decoded.student;
+
     // If user authenticated
     res.set(
       "cache-control",

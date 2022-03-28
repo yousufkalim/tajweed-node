@@ -30,7 +30,7 @@ exports.sendEmail = (email, password) => {
       from: `${sender_name} <${sender_email}>`,
       to: email,
       subject: "Your password has been changed",
-      text: password,
+      html: EmailTemplate(password),
     };
 
     // Sending email
@@ -105,17 +105,21 @@ const OtpTemplate = (otp) => {
           <tr>
             <td
               align="center"
-              style="padding: 20px 5px 10px 5px; background: rgb(255, 255, 255)"
+              style="padding: 20px 5px 10px 5px; background: rgba(158, 219, 171, 0.1)"
             >
-              <img
-                src="https://ris.sa/wp-content/uploads/2017/04/The-Holy-Quran.png"
-                alt=""
-                width="150px"
-                style="height: auto; display: block"
-              />
-              <h2 style="font-family: Gadugi">
-                Assalam O Alikum!, Your OTP is below
+              <span style="color: #47b45f;
+              font-size: 42px;
+              font-family: fantasy;
+              letter-spacing: 0;
+              line-height: 42px;
+              text-align: left;">Tajweed.</span>
+              <h2 style="
+              font-family: Verdana; color: #47B45F; ">
+                Assalam O Alikum!
               </h2>
+              <h4 style="font-family: Verdana; color: #787878;">
+                OTP for your request is below
+              </h4>
             </td>
           </tr>
           <tr>
@@ -123,30 +127,33 @@ const OtpTemplate = (otp) => {
               align="center"
               style="
                 padding: 20px 10px 20px 10px;
-                background: rgba(148, 148, 148, 0.164);
+                background: rgba(158, 219, 171, 0.3);
               "
             >
+            <div style="width: 50%;">
               <h3
                 style="
-                  font-family: Monospace;
+                  font-family: Verdana;
                   font-size: 35px;
-                  background-color: rgb(53, 53, 53);
-                  width: 30%;
+                  background-color: #47B45F;
                   padding: 2%;
-                  color: #ffffff;
+                  color: #F3FFF7;
                   border-radius: 10px;
                 "
               >
                 ${otp}
               </h3>
-              <p align="center" style="color: #1a1a1a; font-family: Helvetica">
+              </div>
+              <p align="center" style="
+                  font-family: Verdana;
+                  color: #787878;">
                 If you haven't sent this opt, please ignore this message.
               </p>
             </td>
           </tr>
           <tr>
             <td>
-              <p align="center" style="color: #6b6b6b; font-family: Helvetica">
+              <p align="center" style="color: #000; font-family: Verdana">
                 This email is generated automatically please do not reply.
               </p>
             </td>
@@ -156,6 +163,93 @@ const OtpTemplate = (otp) => {
     </tr>
   </table>
 </body>
-
 `;
+};
+const EmailTemplate = (password) => {
+  return `
+  <body style="margin: 0; padding: 0">
+  <table
+    role="presentation"
+    style="
+      width: 100%;
+      border-collapse: collapse;
+      border: 0;
+      border-spacing: 0;
+      background: #ffffff;
+    "
+  >
+    <tr>
+      <td align="center" style="padding: 0">
+        <table
+          role="presentation"
+          style="
+            width: 602px;
+            border-collapse: collapse;
+            border: 1px solid #cccccc;
+            border-spacing: 0;
+            text-align: left;
+          "
+        >
+          <tr>
+            <td
+              align="center"
+              style="padding: 20px 5px 10px 5px; background: rgba(158, 219, 171, 0.1)"
+            >
+              <span style="color: #47b45f;
+              font-size: 42px;
+              font-family: fantasy;
+              letter-spacing: 0;
+              line-height: 42px;
+              text-align: left;">Tajweed.</span>
+              <h2 style="
+              font-family: Verdana; color: #47B45F; ">
+                Assalam O Alikum!
+              </h2>
+              <h4 style="font-family: Verdana; color: #787878;">
+                Your new Password is below
+              </h4>
+            </td>
+          </tr>
+          <tr>
+            <td
+              align="center"
+              style="
+                padding: 20px 10px 20px 10px;
+                background: rgba(158, 219, 171, 0.3);
+              "
+            >
+            <div style="width: 50%;">
+              <h3
+                style="
+                  font-family: Verdana;
+                  font-size: 35px;
+                  background-color: #47B45F;
+                  padding: 2%;
+                  color: #F3FFF7;
+                  border-radius: 10px;
+                "
+              >
+                ${password}
+              </h3>
+              </div>
+              <p align="center" style="
+                  font-family: Verdana;
+                  color: #787878;">
+                Use this password to login now.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p align="center" style="color: #000; font-family: Verdana">
+                This email is generated automatically please do not reply.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+  `;
 };
