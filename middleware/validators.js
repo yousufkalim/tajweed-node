@@ -69,8 +69,6 @@ exports.validateStudent = [
     .trim(),
   check("phone")
     .optional()
-    .isNumeric()
-    .withMessage("Phone number must be numeric")
     .isLength({ min: 11 })
     .withMessage("Phone number must be 11 number long")
     .trim(),
@@ -173,7 +171,8 @@ exports.isValidated = (req, res, next) => {
   const errors = validationResult(req); // Validating the request by previous middleware's strategy
   if (!errors.isEmpty()) {
     // On error
-    res.status(400).send({ success: false, message: errors.array()[0] }); // Sending first error to the client from array of errors
+    console.log(errors.array()[0]);
+    res.status(400).send({ success: false, message: errors.array()[0].msg }); // Sending first error to the client from array of errors
   } else {
     // Validated successfully
     next(); // Pass the request to next middleware or controller
