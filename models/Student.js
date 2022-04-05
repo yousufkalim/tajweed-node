@@ -61,7 +61,12 @@ const studentSchema = new mongoose.Schema(
     language: String,
     skype_id: String,
     zoom_id: String,
+    invoice:[{
+      type:mongoose.Types.ObjectId,
+      ref: "invoices" 
+    }],
   },
+
   {
     timestamps: true,
   }

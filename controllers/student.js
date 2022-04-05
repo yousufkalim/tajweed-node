@@ -4,6 +4,7 @@
  */
 
 const Student = require("../models/Student");
+const Invoices=require("../models/Invoices")
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const bcryptSalt = process.env.BCRYPT_SALT || 10;
@@ -26,10 +27,13 @@ exports.create = async (req, res) => {
     req.body.password = bcrypt.hashSync(
       req.body.password,
       parseInt(bcryptSalt)
-    );
-
+    )
+     let start_date=new Date(req.body.start_date)
+    let end_date=start_date.getTime()+2592000000;
     const student = await Student.create(req.body);
-
+    const invoices=await Invoices.create({course:req.body.course_name,start_date:start_date,end_date:new Date(end_date),payment:"199",user:student._id})
+    student.invoice.push(invoices._id)
+    student.save()
     res.json({ success: true, student });
   } catch (err) {
     // Error handling
