@@ -4,7 +4,7 @@
  */
 
 const Student = require("../models/Student");
-const Invoices=require("../models/Invoices")
+const Invoices = require("../models/Invoices");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const bcryptSalt = process.env.BCRYPT_SALT || 10;
@@ -27,13 +27,19 @@ exports.create = async (req, res) => {
     req.body.password = bcrypt.hashSync(
       req.body.password,
       parseInt(bcryptSalt)
-    )
-     let start_date=new Date(req.body.start_date)
-    let end_date=start_date.getTime()+2592000000;
+    );
+    let start_date = new Date(req.body.start_date);
+    let end_date = start_date.getTime() + 2592000000;
     const student = await Student.create(req.body);
-    const invoices=await Invoices.create({course:req.body.course_name,start_date:start_date,end_date:new Date(end_date),payment:"199",user:student._id})
-    student.invoice.push(invoices._id)
-    student.save()
+    const invoices = await Invoices.create({
+      course: req.body.course_name,
+      start_date: start_date,
+      end_date: new Date(end_date),
+      payment: "199",
+      user: student._id,
+    });
+    student.invoice.push(invoices._id);
+    student.save();
     res.json({ success: true, student });
   } catch (err) {
     // Error handling
@@ -109,11 +115,17 @@ exports.delete = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     // Getting email and password
-    const { email, password } = req.body;
+    const { email, password, updated } = req.body;
 
     // Getting student from db
     const student = await Student.findOne({ email });
-
+    //check whether the app is updated or not
+    if (!updated) {
+      // If updated is false
+      return res
+        .status(404)
+        .json({ success: false, message: "Please Update  App first" });
+    }
     if (!student) {
       // If student not found
       console.log(student);
