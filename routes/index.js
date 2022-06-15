@@ -11,6 +11,7 @@ router.use("/auth", require("./auth")); // All the auth routes
 router.use("/student", require("./student")); // All the routes for regular student
 router.use("/contacts", require("./contacts")); // All the routes for contact
 router.use("/invoices", require("./invoices")); // All the routes for contact
+router.use("/otps", require("./otps")); // All the routes for contact
 
 // Export
 module.exports = router;

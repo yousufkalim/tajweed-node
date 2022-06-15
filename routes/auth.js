@@ -5,6 +5,7 @@
 const router = require("express").Router();
 const auth = require("../controllers/auth");
 const { checkAuth } = require("../middleware/checkAuth");
+var GoogleStrategy = require("passport-google-oauth2").Strategy;
 const {
   validateLogin,
   isValidated,
