@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema(
     whatsapp_number: {
       type: String,
     },
+    phone_number: {
+      type: String,
+      required: true,
+    },
     otp: {
       type: String,
       minlength: 6,

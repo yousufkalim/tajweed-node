@@ -128,7 +128,13 @@ exports.validateStudentUpdate = [
     .trim(),
   check("starting").optional().isDate().withMessage("Invalid Date").trim(),
 ];
-
+exports.validateOTPCreate = [
+  check("phone_number", "phone_number is required.").notEmpty(),
+];
+exports.validateOTPVerify = [
+  check("phone_number", "phone_number is required.").notEmpty(),
+  check("Otp", "Otp is required.").notEmpty().trim(),
+];
 /*
 ======================
 Result
