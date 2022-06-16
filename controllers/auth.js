@@ -8,6 +8,10 @@ const jwt = require("jsonwebtoken");
 const { sendEmail } = require("../utils/sendEmail");
 const bcryptSalt = process.env.BCRYPT_SALT || 10;
 const tokenSecret = process.env.JWT_SECRET;
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const twilio_sender = process.env.TWILIO_SENDER;
+const client = require("twilio")(accountSid, authToken);
 
 /**
  * Login
@@ -17,10 +21,10 @@ const tokenSecret = process.env.JWT_SECRET;
 exports.login = async (req, res) => {
   try {
     // Getting email and password
-    const { email, password } = req.body;
+    const { phone_number, password } = req.body;
 
     // Getting user from db
-    const user = await Users.findOne({ email });
+    const user = await Users.findOne({ phone_number });
 
     if (!user) {
       // If user not found
@@ -40,6 +44,11 @@ exports.login = async (req, res) => {
         .json({ success: false, message: "Invalid Password" });
     }
 
+    if (!user.verification) {
+      return res
+        .status(402)
+        .json({ success: false, message: "User not verified" });
+    }
     // Creating payload with user object
     const payload = { user };
 
@@ -110,8 +119,8 @@ exports.changePassword = async (req, res) => {
  */
 exports.forgot = async (req, res) => {
   try {
-    let { email } = req.params;
-    let user = await Users.findOne({ email });
+    let { phone_number } = req.params;
+    let user = await Users.findOne({ phone_number });
 
     if (!user) {
       return res
@@ -120,25 +129,26 @@ exports.forgot = async (req, res) => {
     }
 
     // Generating random password
-    let randomPassword = Math.random().toString(36).slice(-8);
-
-    // Sending email to user
-    sendEmail(email, randomPassword)
-      .then(async () => {
-        // If email is sent then we have to update the password in db
-        user.password = await bcrypt.hash(randomPassword, parseInt(bcryptSalt));
-        await user.save();
-
-        // Done
-        res.json({ success: true, message: "Email sent successfully" });
-      })
-      .catch((err) => {
-        // Error handling
-        console.log("Error ----> ", err);
-        res
-          .status(500)
-          .json({ success: false, message: "Internal server error" });
-      });
+    let randomPassword = Math.random().toString(36).substring(2, 10);
+    if (client.messages) {
+      client.messages
+        .create({
+          body: `Your temporary  Password is ${randomPassword} `,
+          from: twilio_sender,
+          to: phone_number,
+        })
+        .then((message) => console.log(message.sid))
+        .catch((e) => {
+          return console.error("Got an error:", e.code, e.message);
+        });
+    }
+    user.password = await bcrypt.hash(randomPassword, parseInt(bcryptSalt));
+    await user.save();
+    res.json({
+      success: true,
+      message: "Password sent successfully",
+      password: randomPassword,
+    });
   } catch (err) {
     // Error handling
     console.log("Error ----> ", err);

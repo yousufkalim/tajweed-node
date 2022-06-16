@@ -6,7 +6,10 @@ const Users = require("../models/Users");
 const bcrypt = require("bcryptjs");
 const { sendOTP } = require("../utils/sendEmail");
 const bcryptSalt = process.env.BCRYPT_SALT || 10;
-
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const twilio_sender = process.env.TWILIO_SENDER;
+const client = require("twilio")(accountSid, authToken);
 /**
  * Check Eamil
  * @param {object} req
@@ -32,8 +35,8 @@ exports.checkEmail = async (req, res) => {
  */
 exports.create = async (req, res) => {
   try {
-    let { email } = req.body; // Getting required fields from body
-    const existingUser = await Users.findOne({ email }); // Finding already existing user
+    let { phone_number } = req.body; // Getting required fields from body
+    const existingUser = await Users.findOne({ phone_number }); // Finding already existing user
     // Extra Validations
     if (existingUser) {
       // If we found existing user in db
@@ -47,9 +50,20 @@ exports.create = async (req, res) => {
         parseInt(bcryptSalt)
       );
     }
-
+    req.body.otp = Math.floor(100000 + Math.random() * 900000);
+    if (client.messages) {
+      client.messages
+        .create({
+          body: `Please confirm your phone number,Your One Time Password is ${req.body.otp}.... :)`,
+          from: twilio_sender,
+          to: phone_number,
+        })
+        .then((message) => console.log(message.sid))
+        .catch((e) => {
+          return console.error("Got an error:", e.code, e.message);
+        });
+    }
     const user = await Users.create(req.body); // Adding user in db
-
     // Done
     res.json({ success: true, user }); //Success
   } catch (err) {
@@ -104,19 +118,19 @@ exports.assignOtp = async (req, res) => {
     }
     // req.body.password = bcrypt.hashSync(password, parseInt(bcryptSalt)); // Hashing the password with salt 8
     let otp = Math.random().toString(36).slice(-6);
-    console.log("otp", otp);
-    sendOTP(user.email, otp).then(async () => {
-      // If email is sent then we have to update the otp n password in db
-      // user.password = req.body.password;
-      user.otp = otp;
-      await user.save();
-      // Done
-      return res.json({
-        success: true,
-        message: "Otp successfully sent",
-        user,
-      });
-    });
+
+    // sendOTP(user.email, otp).then(async () => {
+    //   // If email is sent then we have to update the otp n password in db
+    //   // user.password = req.body.password;
+    //   user.otp = otp;
+    //   await user.save();
+    //   // Done
+    //   return res.json({
+    //     success: true,
+    //     message: "Otp successfully sent",
+    //     user,
+    //   });
+    // });
   } catch (err) {
     // Error handling
     console.log("Error ----> ", err);
@@ -128,6 +142,13 @@ exports.verifyOTP = async (req, res) => {
     const userId = req.params.userId;
     const otp = req.body.otp;
     const user = await Users.findById(userId);
+    if (!user) {
+      return res.json({
+        success: true,
+        message: "user not found",
+        user,
+      });
+    }
     if (user.otp === otp) {
       user.verification = true;
       user.otp = null;

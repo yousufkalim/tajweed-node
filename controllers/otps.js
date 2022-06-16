@@ -10,7 +10,6 @@ const twilio_sender = process.env.TWILIO_SENDER;
 const client = require("twilio")(accountSid, authToken);
 const jwt = require("jsonwebtoken");
 const tokenSecret = process.env.JWT_SECRET;
-const findOrCreate = require("mongoose-findorcreate");
 
 /**
  * Create OTP
