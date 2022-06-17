@@ -16,10 +16,10 @@ const client = require("twilio")(accountSid, authToken);
  * @param {object} res
  */
 
-exports.checkEmail = async (req, res) => {
+exports.checkPhone = async (req, res) => {
   try {
-    const user = await Users.findOne({ email: req.params.email });
-
+    let { phone_number } = req.body.phone_number;
+    const user = await Users.findOne({ phone_number });
     res.json({ success: true, userExits: user ? true : false });
   } catch (err) {
     // Error handling

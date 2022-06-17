@@ -8,6 +8,7 @@ const { upload } = require("../middleware/multer");
 const {
   validateUser,
   validatePassword,
+  validatePhone,
   validateUserUpdate,
   isValidated,
 } = require("../middleware/validators");
@@ -22,7 +23,7 @@ const {
  */
 
 // Create - User Signup
-router.get("/email/:email", users.checkEmail);
+router.post("/phone_number", validatePhone, users.checkPhone);
 router.post("/", validateUser, isValidated, users.create);
 
 // Read

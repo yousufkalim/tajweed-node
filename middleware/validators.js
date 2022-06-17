@@ -16,6 +16,9 @@ exports.validateUser = [
   check("phone_number", "phone_number is required.").notEmpty().trim(),
   check("password", "password is required.").notEmpty().trim(),
 ];
+exports.validatePhone = [
+  check("phone_number", "phone_number is required.").notEmpty().trim(),
+];
 
 exports.validatePassword = [
   check("password", "Password is required.")
