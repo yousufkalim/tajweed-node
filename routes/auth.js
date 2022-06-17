@@ -29,7 +29,7 @@ router.put(
   isValidated,
   auth.changePassword
 ); // Change password route
-router.put("/forgot/:email", auth.forgot);
+router.put("/forgot/:phone_number", auth.forgot);
 
 // Export
 module.exports = router;
