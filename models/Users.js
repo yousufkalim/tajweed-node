@@ -13,7 +13,6 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: true,
       unique: true,
       lowercase: true,
     },
@@ -25,16 +24,13 @@ const userSchema = new mongoose.Schema(
     number: {
       type: String,
     },
+    otp: Number,
     whatsapp_number: {
       type: String,
     },
     phone_number: {
       type: String,
       required: true,
-    },
-    otp: {
-      type: String,
-      minlength: 6,
     },
     verification: {
       type: Boolean,
