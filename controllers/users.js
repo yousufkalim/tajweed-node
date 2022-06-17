@@ -18,7 +18,8 @@ const client = require("twilio")(accountSid, authToken);
 
 exports.checkPhone = async (req, res) => {
   try {
-    let { phone_number } = req.body.phone_number;
+    let { phone_number } = req.body;
+    console.log(phone_number);
     const user = await Users.findOne({ phone_number });
     res.json({ success: true, userExits: user ? true : false });
   } catch (err) {
@@ -174,12 +175,20 @@ exports.update = async (req, res) => {
   try {
     const userId = req.params.userId; // Getting user id from URL parameter
 
-    // if (req.body.password) {
-    //   req.body.password = bcrypt.hashSync(
-    //     req.body.password,
-    //     parseInt(bcryptSalt)
-    //   );
-    // }
+    if (req.body.email) {
+      const existingUser = await Users.findOne({ email: req.body.email });
+      if (existingUser) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Email  already exist" });
+      }
+    }
+    if (req.body.password) {
+      req.body.password = bcrypt.hashSync(
+        req.body.password,
+        parseInt(bcryptSalt)
+      );
+    }
 
     const user = await Users.findByIdAndUpdate(userId, req.body, { new: true }); // Updating the user
     res.json({ success: true, user }); // Success

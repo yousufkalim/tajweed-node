@@ -23,7 +23,7 @@ const {
  */
 
 // Create - User Signup
-router.post("/phone_number", validatePhone, users.checkPhone);
+router.post("/phone_number", validatePhone, isValidated, users.checkPhone);
 router.post("/", validateUser, isValidated, users.create);
 
 // Read
@@ -33,7 +33,7 @@ router.get("/:userId", users.getById); // Get one user by it's id
 router.put("/sendotp/:userId", users.assignOtp); // Send OTP
 router.put("/verifyOTP/:userId", users.verifyOTP); // Verify OTP
 // Update
-router.put("/:userId", validateUserUpdate, isValidated, users.update); // Update a specific user by it's id
+router.put("/:userId", users.update); // Update a specific user by it's id
 
 // Delete
 router.delete("/:userId", users.delete); // delete a specific user by it's id

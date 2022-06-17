@@ -128,11 +128,11 @@ exports.forgot = async (req, res) => {
     }
 
     // Generating random password
-    let randomPassword = Math.random().toString(36).substring(2, 10);
+    const otp = Math.floor(100000 + Math.random() * 900000);
     if (client.messages) {
       client.messages
         .create({
-          body: `Your temporary  Password is ${randomPassword} `,
+          body: `Please confirm your phone number,Your One Time Password is ${otp}.... :)`,
           from: twilio_sender,
           to: phone_number,
         })
@@ -141,12 +141,14 @@ exports.forgot = async (req, res) => {
           return console.error("Got an error:", e.code, e.message);
         });
     }
-    user.password = await bcrypt.hash(randomPassword, parseInt(bcryptSalt));
+    user.otp = otp;
+    user.verification = false;
     await user.save();
     res.json({
       success: true,
       message: "Password sent successfully",
-      password: randomPassword,
+      otp: otp,
+      user,
     });
   } catch (err) {
     // Error handling
