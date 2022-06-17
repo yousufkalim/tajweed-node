@@ -18,7 +18,8 @@ const client = require("twilio")(accountSid, authToken);
 
 exports.checkPhone = async (req, res) => {
   try {
-    let { phone_number } = req.body.phone_number;
+    let { phone_number } = req.body;
+    console.log(phone_number);
     const user = await Users.findOne({ phone_number });
     res.json({ success: true, userExits: user ? true : false });
   } catch (err) {

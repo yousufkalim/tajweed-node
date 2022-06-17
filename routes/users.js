@@ -23,7 +23,7 @@ const {
  */
 
 // Create - User Signup
-router.post("/phone_number", validatePhone, users.checkPhone);
+router.post("/phone_number", validatePhone, isValidated, users.checkPhone);
 router.post("/", validateUser, isValidated, users.create);
 
 // Read
