@@ -33,7 +33,6 @@ exports.login = async (req, res) => {
         .status(404)
         .json({ success: false, message: "User not found" });
     }
-
     // Comparing password
     const isMatched = bcrypt.compareSync(password, user.password);
 

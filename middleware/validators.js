@@ -31,7 +31,7 @@ exports.validatePassword = [
 exports.validateUserUpdate = [
   check("name", "Name is required.").notEmpty().trim(),
   check("email", "Email is required.").notEmpty().isEmail().trim(),
-  check("number", "Number is required.").notEmpty().trim(),
+  check("phone_number", "phone_number is required.").notEmpty().trim(),
 ];
 
 // Login validation
