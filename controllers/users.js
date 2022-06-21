@@ -29,6 +29,19 @@ exports.checkPhone = async (req, res) => {
   }
 };
 
+exports.checkEmail = async (req, res) => {
+  try {
+    let { email } = req.body;
+
+    const user = await Users.findOne({ email });
+    res.json({ success: true, userExits: user ? true : false });
+  } catch (err) {
+    // Error handling
+    console.log("Error ----> ", err);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
 /**
  * Create User - Signup
  * @param {object} req

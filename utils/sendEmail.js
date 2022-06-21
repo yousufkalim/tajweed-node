@@ -14,7 +14,7 @@ const sender_password = process.env.MAILER_PASSWORD;
  * @param {string} password
  * @return {void}
  */
-exports.sendEmail = (email, password) => {
+exports.sendEmail = (email, otp) => {
   return new Promise((resolve, reject) => {
     // Sender mail server config
     var transporter = nodemailer.createTransport({
@@ -29,8 +29,8 @@ exports.sendEmail = (email, password) => {
     var mailOptions = {
       from: `${sender_name} <${sender_email}>`,
       to: email,
-      subject: "Your password has been changed",
-      html: EmailTemplate(password),
+      subject: "Your one time password is:",
+      html: EmailTemplate(otp),
     };
 
     // Sending email

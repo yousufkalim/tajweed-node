@@ -9,6 +9,7 @@ var GoogleStrategy = require("passport-google-oauth2").Strategy;
 const {
   validateLogin,
   isValidated,
+  validateForgetPassword,
   changePasswordValidate,
 } = require("../middleware/validators");
 
@@ -29,7 +30,7 @@ router.put(
   isValidated,
   auth.changePassword
 ); // Change password route
-router.put("/forgot/:phone_number", auth.forgot);
+router.put("/forgot", validateForgetPassword, isValidated, auth.forgot);
 
 // Export
 module.exports = router;

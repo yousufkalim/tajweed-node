@@ -21,17 +21,31 @@ const client = require("twilio")(accountSid, authToken);
 exports.login = async (req, res) => {
   try {
     // Getting email and password
-    const { phone_number, password } = req.body;
+    var user = {};
+    const { phone_number, password, email } = req.body;
 
     // Getting user from db
-    const user = await Users.findOne({ phone_number });
+    if (phone_number) {
+      user = await Users.findOne({ phone_number });
 
-    if (!user) {
-      // If user not found
-      console.log(user);
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      if (!user) {
+        // If user not found
+        console.log(user);
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found" });
+      }
+    }
+    if (email) {
+      user = await Users.findOne({ email });
+
+      if (!user) {
+        // If user not found
+        console.log(user);
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found" });
+      }
     }
     // Comparing password
     const isMatched = bcrypt.compareSync(password, user.password);
@@ -118,35 +132,45 @@ exports.changePassword = async (req, res) => {
  */
 exports.forgot = async (req, res) => {
   try {
-    let { phone_number } = req.params;
-    let user = await Users.findOne({ phone_number });
-
-    if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
-    }
-
-    // Generating random password
+    var user = {};
+    let { phone_number, email } = req.body;
     const otp = Math.floor(100000 + Math.random() * 900000);
-    if (client.messages) {
-      client.messages
-        .create({
-          body: `Please confirm your phone number,Your One Time Password is ${otp}.... :)`,
-          from: twilio_sender,
-          to: phone_number,
-        })
-        .then((message) => console.log(message.sid))
-        .catch((e) => {
-          return console.error("Got an error:", e.code, e.message);
-        });
+    // Generating random otp
+    if (phone_number) {
+      user = await Users.findOne({ phone_number });
+      if (!user) {
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found" });
+      }
+      if (client.messages) {
+        client.messages
+          .create({
+            body: `Please confirm your phone number,Your One Time Password is ${otp}.... :)`,
+            from: twilio_sender,
+            to: phone_number,
+          })
+          .then((message) => console.log(message.sid))
+          .catch((e) => {
+            return console.error("Got an error:", e.code, e.message);
+          });
+      }
+    }
+    if (email) {
+      user = await Users.findOne({ email });
+      if (!user) {
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found" });
+      }
+      await sendEmail(email, otp);
     }
     user.otp = otp;
     user.verification = false;
     await user.save();
     res.json({
       success: true,
-      message: "Password sent successfully",
+      message: "Otp sent successfully",
       otp: otp,
       user,
     });
