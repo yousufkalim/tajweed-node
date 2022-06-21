@@ -26,7 +26,6 @@ const userSchema = new mongoose.Schema(
     },
     phone_number: {
       type: String,
-      required: true,
     },
     verification: {
       type: Boolean,

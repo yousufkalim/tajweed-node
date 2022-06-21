@@ -2,7 +2,7 @@
  * All the validation
  * @author Shuja Naqvi
  */
-const { check, validationResult } = require("express-validator");
+const { check, oneOf, validationResult } = require("express-validator");
 
 /*
 ====================
@@ -10,15 +10,16 @@ Validations
 ====================
 */
 
-// You can create multiple validations strategies (Read express-validator documentation for more details)
-// User Signup Validation
-exports.validateUser = [
-  check("phone_number", "phone_number is required.").notEmpty().trim(),
-  check("password", "password is required.").notEmpty().trim(),
-];
 exports.validatePhone = [
   check("phone_number", "phone_number is required.").notEmpty().trim(),
 ];
+
+exports.validateUser = [
+  check("password", "password is required.").notEmpty().trim(),
+  check("phone_number", "phone_number is required.").notEmpty().trim(),
+];
+
+exports.validateEmail = [check("email", "email is required.").isEmail()];
 
 exports.validatePassword = [
   check("password", "Password is required.")
@@ -31,16 +32,25 @@ exports.validatePassword = [
 exports.validateUserUpdate = [
   check("name", "Name is required.").notEmpty().trim(),
   check("email", "Email is required.").notEmpty().isEmail().trim(),
-  check("phone_number", "phone_number is required.").notEmpty().trim(),
 ];
 
 // Login validation
 exports.validateLogin = [
-  check("phone_number", "phone_number is required").notEmpty().trim(),
+  oneOf(
+    [check("phone_number").exists(), check("email").exists()],
+    "you must provide at least phone_number or email"
+  ),
   check("password", "Password is required.")
     .notEmpty()
     .trim()
     .isLength({ min: 8 }),
+];
+// Login validation
+exports.validateForgetPassword = [
+  oneOf(
+    [check("phone_number").exists(), check("email").exists()],
+    "you must provide at least phone_number or email"
+  ),
 ];
 
 // Change password validation
