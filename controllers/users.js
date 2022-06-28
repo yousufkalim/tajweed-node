@@ -31,9 +31,8 @@ exports.checkPhone = async (req, res) => {
 
 exports.checkEmail = async (req, res) => {
   try {
-    let { email } = req.body;
+    const user = await Users.findOne({ email: req.params.email });
 
-    const user = await Users.findOne({ email });
     res.json({ success: true, userExits: user ? true : false });
   } catch (err) {
     // Error handling
