@@ -8,7 +8,7 @@ const { sendOTP } = require("../utils/sendEmail");
 const bcryptSalt = process.env.BCRYPT_SALT || 10;
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilio_sender = process.env.TWILIO_SENDER;
+const twilio_sender = process.env.MESSAGING_ID;
 const client = require("twilio")(accountSid, authToken);
 /**
  * Check Eamil
@@ -18,9 +18,7 @@ const client = require("twilio")(accountSid, authToken);
 
 exports.checkPhone = async (req, res) => {
   try {
-    let { phone_number } = req.body;
-    console.log(phone_number);
-    const user = await Users.findOne({ phone_number });
+    const user = await Users.findOne({ phone_number: req.params.phone_number });
     res.json({ success: true, userExits: user ? true : false });
   } catch (err) {
     // Error handling
@@ -68,7 +66,7 @@ exports.create = async (req, res) => {
       client.messages
         .create({
           body: `Please confirm your phone number,Your One Time Password is ${req.body.otp}.... :)`,
-          from: twilio_sender,
+          messagingServiceSid: twilio_sender,
           to: phone_number,
         })
         .then((message) => console.log(message.sid))

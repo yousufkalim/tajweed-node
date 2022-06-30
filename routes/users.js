@@ -24,7 +24,7 @@ const {
  */
 
 // Create - User Signup
-router.post("/phone_number", validatePhone, isValidated, users.checkPhone);
+router.post("/phone_number/:phone_number", users.checkPhone);
 router.get("/email/:email", users.checkEmail);
 router.post("/", validateUser, isValidated, users.create);
 
@@ -37,7 +37,7 @@ router.put("/verifyOTP/:userId", users.verifyOTP); // Verify OTP
 // Update
 router.put("/:userId", users.update); // Update a specific user by it's id
 
-// Deletex
+// Delete
 router.delete("/:userId", users.delete); // delete a specific user by it's id
 
 // Export
