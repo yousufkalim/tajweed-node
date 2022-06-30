@@ -6,7 +6,7 @@ const OTPs = require("../models/Otps");
 const Users = require("../models/Users");
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilio_sender = process.env.TWILIO_SENDER;
+const twilio_sender = process.env.MESSAGING_ID;
 const client = require("twilio")(accountSid, authToken);
 const jwt = require("jsonwebtoken");
 const tokenSecret = process.env.JWT_SECRET;
@@ -32,7 +32,7 @@ exports.create = async (req, res) => {
       client.messages
         .create({
           body: `Please confirm your phone number,Your One Time Password is ${req.body.otp}.... :)`,
-          from: twilio_sender,
+          messagingServiceSid: twilio_sender,
           to: phone_number,
         })
         .then((message) => console.log(message.sid))
@@ -76,7 +76,6 @@ exports.verify = async (req, res) => {
     // Generating token
     jwt.sign(payload, tokenSecret, { expiresIn: 360000 }, (err, token) => {
       if (err) throw err;
-      console.log("Hi");
       return res.json({
         success: true,
         message: "OTP verified",

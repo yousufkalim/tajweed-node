@@ -10,7 +10,7 @@ const bcryptSalt = process.env.BCRYPT_SALT || 10;
 const tokenSecret = process.env.JWT_SECRET;
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilio_sender = process.env.TWILIO_SENDER;
+const twilio_sender = process.env.MESSAGING_ID;
 const client = require("twilio")(accountSid, authToken);
 
 /**
@@ -147,7 +147,7 @@ exports.forgot = async (req, res) => {
         client.messages
           .create({
             body: `Please confirm your phone number,Your One Time Password is ${otp}.... :)`,
-            from: twilio_sender,
+            messagingServiceSid: twilio_sender,
             to: phone_number,
           })
           .then((message) => console.log(message.sid))
