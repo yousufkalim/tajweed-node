@@ -150,9 +150,9 @@ exports.assignOtp = async (req, res) => {
 };
 exports.verifyOTP = async (req, res) => {
   try {
-    const userId = req.params.userId;
+    const phone_number = req.params.phone_number;
     const otp = req.body.otp;
-    const user = await Users.findById(userId);
+    const user = await Users.findOne({ phone_number: phone_number });
     if (!user) {
       return res.json({
         success: true,

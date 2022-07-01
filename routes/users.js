@@ -33,7 +33,7 @@ router.get("/", users.getAll); // Get all users at once
 router.get("/:userId", users.getById); // Get one user by it's id
 
 router.put("/sendotp/:userId", users.assignOtp); // Send OTP
-router.put("/verifyOTP/:userId", users.verifyOTP); // Verify OTP
+router.put("/verifyOTP/:phone_number", users.verifyOTP); // Verify OTP
 // Update
 router.put("/:userId", users.update); // Update a specific user by it's id
 
