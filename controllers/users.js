@@ -155,9 +155,8 @@ exports.verifyOTP = async (req, res) => {
     const user = await Users.findOne({ phone_number: phone_number });
     if (!user) {
       return res.json({
-        success: true,
+        success: false,
         message: "user not found",
-        user,
       });
     }
     if (user.otp === otp) {
