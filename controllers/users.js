@@ -2,14 +2,15 @@
  * User CRUD controllers
  * @author Shuja Naqvi
  */
-const Users = require("../models/Users");
-const bcrypt = require("bcryptjs");
-const { sendOTP } = require("../utils/sendEmail");
+const Users = require('../models/Users');
+const Invoices = require('../models/Invoices');
+const bcrypt = require('bcryptjs');
+const { sendOTP } = require('../utils/sendEmail');
 const bcryptSalt = process.env.BCRYPT_SALT || 10;
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio_sender = process.env.MESSAGING_ID;
-const client = require("twilio")(accountSid, authToken);
+const client = require('twilio')(accountSid, authToken);
 /**
  * Check Eamil
  * @param {object} req
@@ -22,8 +23,8 @@ exports.checkPhone = async (req, res) => {
     res.json({ success: true, userExits: user ? true : false });
   } catch (err) {
     // Error handling
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
@@ -34,8 +35,8 @@ exports.checkEmail = async (req, res) => {
     res.json({ success: true, userExits: user ? true : false });
   } catch (err) {
     // Error handling
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
@@ -51,15 +52,10 @@ exports.create = async (req, res) => {
     // Extra Validations
     if (existingUser) {
       // If we found existing user in db
-      return res
-        .status(409)
-        .json({ success: false, message: "User already exists." });
+      return res.status(409).json({ success: false, message: 'User already exists.' });
     }
     if (req.body.password) {
-      req.body.password = bcrypt.hashSync(
-        req.body.password,
-        parseInt(bcryptSalt)
-      );
+      req.body.password = bcrypt.hashSync(req.body.password, parseInt(bcryptSalt));
     }
     req.body.otp = Math.floor(100000 + Math.random() * 900000);
     if (client.messages) {
@@ -71,7 +67,7 @@ exports.create = async (req, res) => {
         })
         .then((message) => console.log(message.sid))
         .catch((e) => {
-          return console.error("Got an error:", e.code, e.message);
+          return console.error('Got an error:', e.code, e.message);
         });
     }
     const user = await Users.create(req.body); // Adding user in db
@@ -79,8 +75,8 @@ exports.create = async (req, res) => {
     res.json({ success: true, user }); //Success
   } catch (err) {
     // Error handling
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
@@ -95,8 +91,8 @@ exports.getAll = async (req, res) => {
     res.json({ success: true, users: users.reverse() }); // Success
   } catch (err) {
     // Error handling
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
@@ -112,8 +108,8 @@ exports.getById = async (req, res) => {
     res.json({ success: true, user }); // Success
   } catch (err) {
     // Error handling
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 //Send OTP to a user
@@ -123,9 +119,7 @@ exports.assignOtp = async (req, res) => {
     // const password = req.body.password;
     const user = await Users.findById(userId);
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
     // req.body.password = bcrypt.hashSync(password, parseInt(bcryptSalt)); // Hashing the password with salt 8
     let otp = Math.random().toString(36).slice(-6);
@@ -144,8 +138,8 @@ exports.assignOtp = async (req, res) => {
     // });
   } catch (err) {
     // Error handling
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 exports.verifyOTP = async (req, res) => {
@@ -156,7 +150,7 @@ exports.verifyOTP = async (req, res) => {
     if (!user) {
       return res.json({
         success: false,
-        message: "user not found",
+        message: 'user not found',
       });
     }
     if (user.otp === otp) {
@@ -165,14 +159,14 @@ exports.verifyOTP = async (req, res) => {
       await user.save();
       return res.json({
         success: true,
-        message: "You have been verified",
+        message: 'You have been verified',
         user,
       });
     }
-    return res.status(404).json({ success: false, message: "OTP is invalid" });
+    return res.status(404).json({ success: false, message: 'OTP is invalid' });
   } catch (err) {
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 /**
@@ -187,24 +181,19 @@ exports.update = async (req, res) => {
     if (req.body.email) {
       const existingUser = await Users.findOne({ email: req.body.email });
       if (existingUser) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Email  already exist" });
+        return res.status(404).json({ success: false, message: 'Email  already exist' });
       }
     }
     if (req.body.password) {
-      req.body.password = bcrypt.hashSync(
-        req.body.password,
-        parseInt(bcryptSalt)
-      );
+      req.body.password = bcrypt.hashSync(req.body.password, parseInt(bcryptSalt));
     }
 
     const user = await Users.findByIdAndUpdate(userId, req.body, { new: true }); // Updating the user
     res.json({ success: true, user }); // Success
   } catch (err) {
     // Error handling
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
@@ -217,10 +206,13 @@ exports.delete = async (req, res) => {
   try {
     const userId = req.params.userId; // Getting user id from URL parameter
     const user = await Users.findByIdAndDelete(userId); // Deleting the user
+    await Invoices.deleteMany({
+      user: { $in: userId },
+    });
     res.json({ success: true, user }); // Success
   } catch (err) {
     // Error handling
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
