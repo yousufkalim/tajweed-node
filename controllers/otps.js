@@ -2,13 +2,13 @@
  * User OTP controllers
  * @author Shuja Naqvi
  */
-const OTPs = require("../models/Otps");
-const Users = require("../models/Users");
+const OTPs = require('../models/Otps');
+const Users = require('../models/Users');
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio_sender = process.env.MESSAGING_ID;
-const client = require("twilio")(accountSid, authToken);
-const jwt = require("jsonwebtoken");
+const client = require('twilio')(accountSid, authToken);
+const jwt = require('jsonwebtoken');
 const tokenSecret = process.env.JWT_SECRET;
 
 /**
@@ -22,22 +22,20 @@ exports.create = async (req, res) => {
     const existingUser = await Users.findOne({ phone_number: phone_number }); // Finding already existing user
     if (!existingUser) {
       // If we found existing user in db
-      return res
-        .status(409)
-        .json({ success: false, message: "User not found" });
+      return res.status(409).json({ success: false, message: 'User not found' });
     }
     req.body.otp = Math.floor(100000 + Math.random() * 900000);
     req.body.is_verified = false;
     if (client.messages) {
       client.messages
         .create({
-          body: `Please confirm your phone number,Your One Time Password is ${req.body.otp}.... :)`,
+          body: `Your One Time Password is ${req.body.otp}.`,
           messagingServiceSid: twilio_sender,
           to: phone_number,
         })
         .then((message) => console.log(message.sid))
         .catch((e) => {
-          return console.error("Got an error:", e.code, e.message);
+          return console.error('Got an error:', e.code, e.message);
         });
     }
     let otp = await OTPs.findOneAndUpdate({ phone_number }, req.body, {
@@ -46,13 +44,13 @@ exports.create = async (req, res) => {
     });
     return res.json({
       success: true,
-      message: "OTP sent",
+      message: 'OTP sent',
       otp: otp,
     });
   } catch (err) {
     // Error handling
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
@@ -63,9 +61,7 @@ exports.verify = async (req, res) => {
     let otp = await OTPs.findOne({ phone_number }); //find otp by id
     //if otp is invalid
     if (otp.otp != Otp) {
-      return res
-        .status(404)
-        .json({ success: false, message: "OTP is invalid" });
+      return res.status(404).json({ success: false, message: 'OTP is invalid' });
     }
     otp.is_verified = true;
     let user = await Users.findOne({ phone_number: phone_number }); // Finding already existing user
@@ -78,14 +74,14 @@ exports.verify = async (req, res) => {
       if (err) throw err;
       return res.json({
         success: true,
-        message: "OTP verified",
+        message: 'OTP verified',
         otp: otp,
         user: user,
         token: token,
       });
     });
   } catch (err) {
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
