@@ -36,6 +36,7 @@ router.put(
   isValidated,
   auth.forgot,
 );
+router.put('/reset-password', auth.resetPassword);
 
 // Export
 module.exports = router;

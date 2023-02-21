@@ -139,12 +139,10 @@ exports.forgot = async (req, res) => {
 
     user = await Users.findOne({ phone_number });
     if (!user) {
-      return res
-        .status(404)
-        .json({
-          success: false,
-          message: 'User not found with provided phone number',
-        });
+      return res.status(404).json({
+        success: false,
+        message: 'User not found with provided phone number',
+      });
     }
     if (client.messages) {
       client.messages
@@ -167,6 +165,38 @@ exports.forgot = async (req, res) => {
       message: 'Otp sent successfully',
       otp: otp,
       user,
+    });
+  } catch (err) {
+    // Error handling
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+
+/**
+ * Reset password
+ * @param {object} req
+ * @param {object} res
+ */
+exports.resetPassword = async (req, res) => {
+  try {
+    let { password, otp } = req.body;
+
+    const user = await Users.findOne({ otp });
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'OTP is not valid',
+      });
+    }
+
+    user.password = bcrypt.hashSync(password, bcryptSalt);
+    user.otp = null;
+    user.verification = true;
+    await user.save();
+    res.json({
+      success: true,
+      message: 'Password reset successful',
     });
   } catch (err) {
     // Error handling
