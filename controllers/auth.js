@@ -190,7 +190,7 @@ exports.resetPassword = async (req, res) => {
       });
     }
 
-    user.password = bcrypt.hashSync(password, bcryptSalt);
+    user.password = bcrypt.hashSync(password, parseInt(bcryptSalt));
     user.otp = null;
     user.verification = true;
     await user.save();
