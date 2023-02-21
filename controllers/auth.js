@@ -2,16 +2,16 @@
  * User auth controllers
  * @author Shuja Naqvi
  */
-const Users = require("../models/Users");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { sendEmail } = require("../utils/sendEmail");
+const Users = require('../models/Users');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { sendEmail } = require('../utils/sendEmail');
 const bcryptSalt = process.env.BCRYPT_SALT || 10;
 const tokenSecret = process.env.JWT_SECRET;
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio_sender = process.env.MESSAGING_ID;
-const client = require("twilio")(accountSid, authToken);
+const client = require('twilio')(accountSid, authToken);
 
 /**
  * Login
@@ -33,7 +33,7 @@ exports.login = async (req, res) => {
         console.log(user);
         return res
           .status(404)
-          .json({ success: false, message: "User not found" });
+          .json({ success: false, message: 'User not found' });
       }
     }
     if (email) {
@@ -44,7 +44,7 @@ exports.login = async (req, res) => {
         console.log(user);
         return res
           .status(404)
-          .json({ success: false, message: "User not found" });
+          .json({ success: false, message: 'User not found' });
       }
     }
     // Comparing password
@@ -54,13 +54,13 @@ exports.login = async (req, res) => {
       // If password not matched
       return res
         .status(400)
-        .json({ success: false, message: "Invalid Password" });
+        .json({ success: false, message: 'Invalid Password' });
     }
 
     if (!user.verification) {
       return res
         .status(402)
-        .json({ success: false, message: "User not verified" });
+        .json({ success: false, message: 'User not verified' });
     }
     // Creating payload with user object
     const payload = { user };
@@ -74,8 +74,8 @@ exports.login = async (req, res) => {
     });
   } catch (err) {
     // Error handling
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
@@ -92,7 +92,7 @@ exports.changePassword = async (req, res) => {
     if (newPassword !== confirmPassword) {
       return res.status(400).json({
         success: false,
-        message: "New password and confirm password are not same",
+        message: 'New password and confirm password are not same',
       });
     }
 
@@ -101,7 +101,7 @@ exports.changePassword = async (req, res) => {
     if (!user) {
       return res
         .status(404)
-        .json({ success: false, message: "User not found" });
+        .json({ success: false, message: 'User not found' });
     }
 
     const isMatched = bcrypt.compareSync(oldPassword, user.password);
@@ -109,7 +109,7 @@ exports.changePassword = async (req, res) => {
     if (!isMatched) {
       return res
         .status(400)
-        .json({ success: false, message: "Invalid old Password" });
+        .json({ success: false, message: 'Invalid old Password' });
     }
 
     // Generate token
@@ -120,8 +120,8 @@ exports.changePassword = async (req, res) => {
     res.json({ success: true, user });
   } catch (err) {
     // Error handling
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
@@ -133,51 +133,45 @@ exports.changePassword = async (req, res) => {
 exports.forgot = async (req, res) => {
   try {
     var user = {};
-    let { phone_number, email } = req.body;
+    let { phone_number } = req.params;
     const otp = Math.floor(100000 + Math.random() * 900000);
     // Generating random otp
-    if (phone_number) {
-      user = await Users.findOne({ phone_number });
-      if (!user) {
-        return res
-          .status(404)
-          .json({ success: false, message: "User not found" });
-      }
-      if (client.messages) {
-        client.messages
-          .create({
-            body: `Please confirm your phone number,Your One Time Password is ${otp}.... :)`,
-            messagingServiceSid: twilio_sender,
-            to: phone_number,
-          })
-          .then((message) => console.log(message.sid))
-          .catch((e) => {
-            return console.error("Got an error:", e.code, e.message);
-          });
-      }
+
+    user = await Users.findOne({ phone_number });
+    if (!user) {
+      return res
+        .status(404)
+        .json({
+          success: false,
+          message: 'User not found with provided phone number',
+        });
     }
-    if (email) {
-      user = await Users.findOne({ email });
-      if (!user) {
-        return res
-          .status(404)
-          .json({ success: false, message: "User not found" });
-      }
-      await sendEmail(email, otp);
+    if (client.messages) {
+      client.messages
+        .create({
+          body: `Please confirm your phone number,Your One Time Password is ${otp}.... :)`,
+          messagingServiceSid: twilio_sender,
+          to: phone_number,
+        })
+        .then((message) => console.log(message.sid))
+        .catch((e) => {
+          return console.error('Got an error:', e.code, e.message);
+        });
     }
+
     user.otp = otp;
     user.verification = false;
     await user.save();
     res.json({
       success: true,
-      message: "Otp sent successfully",
+      message: 'Otp sent successfully',
       otp: otp,
       user,
     });
   } catch (err) {
     // Error handling
-    console.log("Error ----> ", err);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.log('Error ----> ', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 };
 
